@@ -190,7 +190,14 @@ async function showProblemInternal(node: IProblem): Promise<void> {
         const descriptionConfig: IDescriptionConfiguration = settingUtils.getDescriptionConfiguration();
         const needTranslation: boolean = settingUtils.shouldUseEndpointTranslation();
 
-        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation);
+
+        const wens_custom_file_front_name: string = "custom_leetcode_problem_output_front.config";
+        const wens_custom_file_back_name: string = "custom_leetcode_problem_output_back.config";
+        let wens_custom_file_front_path: string = path.join(workspaceFolder, fileFolder, wens_custom_file_front_name);
+        let wens_custom_file_back_path: string = path.join(workspaceFolder, fileFolder, wens_custom_file_back_name);
+        wens_custom_file_front_path = wsl.useWsl() ? await wsl.toWinPath(wens_custom_file_front_path) : wens_custom_file_front_path;
+        wens_custom_file_back_path = wsl.useWsl() ? await wsl.toWinPath(wens_custom_file_back_path) : wens_custom_file_back_path;
+        await leetCodeExecutor.showProblem(node, language, finalPath, descriptionConfig.showInComment, needTranslation, wens_custom_file_front_path, wens_custom_file_back_path);
         const promises: any[] = [
             vscode.window.showTextDocument(vscode.Uri.file(finalPath), {
                 preview: false,
